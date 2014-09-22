@@ -1,0 +1,16 @@
+<?php
+/**
+ * Configuration file for PHPMailDebug.
+ */
+
+// The hostname where the database can be found.
+$host = 'localhost';
+
+// The database name.
+$name = 'db_name';
+
+// The username which is used to connect to the database.
+$user = 'username';
+
+// The password for the database user.
+$pass = 'password';

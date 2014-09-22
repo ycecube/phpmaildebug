@@ -1,0 +1,56 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+/* --- Mail list --- */
+
+#mails {
+  float: left;
+  overflow: auto;
+  width: 250px;
+}
+
+#mails .mail {
+  border-bottom: 1px solid #000;
+  padding: 5px;
+}
+
+#mails .mail > div {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+#mails .mail:last-child {
+  border-bottom: none;
+}
+
+#mails .mail:hover {
+  background-color: #33aaff;
+  cursor: pointer;
+}
+
+#mails .mail .mail-from {
+  font-weight: bold;
+}
+
+/* --- The mail --- */
+
+#read-mail {
+  position: absolute;
+  overflow: auto;
+  width: 100%;
+  z-index: -1;
+}
+
+#read-mail #mail-header {
+  margin-left: 260px;
+  background-color: #ddd;
+}
+
+#read-mail #mail-body {
+  margin-top: 10px;
+  margin-left: 260px;
+}
