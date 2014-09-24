@@ -5,7 +5,7 @@
  * @TODO: Add support for other database types.
  */
 
-// Datbase connection.
+// Database connection.
 $db = new PDO("mysql:host={$host};dbname={$name}", $user, $pass, array(\PDO::ATTR_PERSISTENT  => true));
 
 /**
@@ -17,8 +17,10 @@ $db = new PDO("mysql:host={$host};dbname={$name}", $user, $pass, array(\PDO::ATT
  *
  * @global PDO $db
  *
- * @param type $query
- * @param type $arguments
+ * @param string $query
+ * @param array $arguments
+ *
+ * @return PDOStatement
  */
 function query($query, array $arguments = array()) {
   global $db;

@@ -1,7 +1,7 @@
 PHPMailDebug
 ============
 This script intended to capture all emails coming from the PHP's sendmail
-output. This should be used only for debugging in a developement environment.
+output. This should be used only for debugging in a development environment.
 
 Note: This project is in a very early stage, so bugs highly possible.
       Any contributions are welcomed :)

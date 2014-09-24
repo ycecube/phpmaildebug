@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPMailDebug for local developement.
+ * PHPMailDebug for local development.
  *
  * Capture sendmail output.
  * Do nothing if it is not called from cli.

@@ -5,7 +5,7 @@
  * @param string $string
  *   An encoded input string.
  * @param string $dest_encode
- *   Destionation character encoding.
+ *   Destination character encoding.
  *
  * @return string
  *   The decoded string.
