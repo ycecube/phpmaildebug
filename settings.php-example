@@ -14,3 +14,9 @@ $user = 'username';
 
 // The password for the database user.
 $pass = 'password';
+
+// Enable or disable auto refresh of the mail list.
+$auto_refresh = true;
+
+// Set the interval in miliseconds in which the new mails should be checked.
+$auto_refresh_interval = 2500;

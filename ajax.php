@@ -11,6 +11,31 @@ if (empty($post)) {
 }
 
 switch ($post['cmd']) {
+  case 'getNewMails':
+    // Gather new mails.
+    $query = query('SELECT * FROM mail WHERE timestamp > :timestamp ORDER BY timestamp ASC',
+      array(':timestamp' => $post['timestampMax']))->fetchAll(PDO::FETCH_CLASS);
+
+    // Assemble a data array for js.
+    $data = array();
+    foreach ($query as $q) {
+      $header = get_header_data($q->header);
+      $data['mails'][] = array(
+        'id' => $q->id,
+        'from' => $header['from'],
+        'subject' => $header['subject'],
+        'date' => date('Y-m-d H:i:s', $q->timestamp),
+      );
+    }
+
+    // The last mail from the query is the latest mail, so we remember
+    // its timestamp.
+    if (!empty($data)) {
+      $data['timestampMax'] = $q->timestamp;
+    }
+
+    echo json_encode($data);
+    break;
   case 'getMailById':
     $query = query('SELECT * FROM mail WHERE id = :id', array(':id' => $post['id']))->fetchObject();
 

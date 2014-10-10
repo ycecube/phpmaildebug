@@ -8,6 +8,7 @@
 require_once 'common.php';
 
 $mails = query('SELECT * FROM mail ORDER BY timestamp DESC')->fetchAll();
+$date_max = query('SELECT MAX(timestamp) FROM mail')->fetch(PDO::FETCH_COLUMN);
 ?>
 
 <!DOCTYPE html>
@@ -17,6 +18,15 @@ $mails = query('SELECT * FROM mail ORDER BY timestamp DESC')->fetchAll();
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link href="css/style.css" rel="stylesheet" type="text/css" />
     <script src="js/jquery.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      PMD = {};
+      PMD.autoRefresh = <?php echo $auto_refresh ? 1 : 0; ?>;
+
+      if (PMD.autoRefresh == 1) {
+        PMD.autoRefreshInterval = <?php echo $auto_refresh_interval; ?>;
+        PMD.timestampMax = <?php echo $date_max; ?>;
+      }
+    </script>
     <script src="js/phpmaildebug.js" type="text/javascript"></script>
   </head>
   <body>
