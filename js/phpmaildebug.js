@@ -2,11 +2,12 @@
  * JS for PHPMailDebug.
  */
 
+var mailId = null;
+
 $(document).ready(function() {
   // Set mail list height to the max of the window height.
   setContentListHeight();
   $(window).resize(setContentListHeight);
-  var mailId = null;
 
   // Auto refresh mails list.
   var autoRefresh = function() {
