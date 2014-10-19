@@ -4,6 +4,24 @@ body {
   font-size: 14px;
 }
 
+/* --- Mail list options --- */
+#mail-options {
+  margin-left: 5px;
+}
+
+#mail-options > div {
+  display: inline-block;
+}
+
+#mail-options > div:hover {
+  color: #33aaff;
+  cursor: pointer;
+}
+
+#mail-options > div:not(:first-child) {
+  display: none;
+}
+
 /* --- Mail list --- */
 
 #mails {

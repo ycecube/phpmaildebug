@@ -36,6 +36,7 @@ switch ($post['cmd']) {
 
     echo json_encode($data);
     break;
+
   case 'getMailById':
     $query = query('SELECT * FROM mail WHERE id = :id', array(':id' => $post['id']))->fetchObject();
 
@@ -117,6 +118,7 @@ switch ($post['cmd']) {
 
     echo json_encode($data);
     break;
+
   case 'getSource':
     $query = query('SELECT * FROM mail WHERE id = :id', array(':id' => $post['id']))->fetchObject();
 
@@ -127,6 +129,13 @@ switch ($post['cmd']) {
 
     echo json_encode('<pre>' . htmlspecialchars($query->header . $query->message) . '</pre>');
     break;
+
+  case 'deleteAllSelectedMessage':
+    foreach ($post['mailIds'] as $id) {
+      query('DELETE FROM mail WHERE id = (:id)', array(':id' => $id));
+    }
+    break;
+
   default:
     echo 'Invalid command!';
     break;

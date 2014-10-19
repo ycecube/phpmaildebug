@@ -6,7 +6,7 @@
  */
 
 // Database connection.
-$db = new PDO("mysql:host={$host};dbname={$name}", $user, $pass, array(\PDO::ATTR_PERSISTENT  => true));
+$db = new PDO("mysql:host={$host};dbname={$name}", $user, $pass, array(PDO::ATTR_PERSISTENT  => true));
 
 /**
  * Database query.
@@ -29,16 +29,16 @@ function query($query, array $arguments = array()) {
 
   foreach ($arguments as $key => $argument) {
     if (is_integer($argument)) {
-      $ps->bindValue($key, $argument, \PDO::PARAM_INT);
+      $ps->bindValue($key, $argument, PDO::PARAM_INT);
     }
     else if (is_bool($argument)) {
-      $ps->bindValue($key, $argument, \PDO::PARAM_BOOL);
+      $ps->bindValue($key, $argument, PDO::PARAM_BOOL);
     }
     else if (is_null($argument)) {
-      $ps->bindValue($key, $argument, \PDO::PARAM_NULL);
+      $ps->bindValue($key, $argument, PDO::PARAM_NULL);
     }
     else {
-      $ps->bindValue($key, $argument, \PDO::PARAM_STR);
+      $ps->bindValue($key, $argument, PDO::PARAM_STR);
     }
   }
   $ps->execute();

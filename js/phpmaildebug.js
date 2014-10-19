@@ -23,7 +23,10 @@ $(document).ready(function() {
         for (var key in data.mails) {
           // Assemble mail list item.
           var mail = '<div class="mail" data-id="' + data.mails[key].id + '">' +
-              '<div class="mail-from">' + data.mails[key].from + '</div>' +
+              '<div class="mail-from">' +
+                '<input type="checkbox">' +
+                '<span>' + data.mails[key].from + '</span>' +
+              '</div>' +
               '<div class="mail-subject">' + data.mails[key].subject + '</div>' +
               '<div class="mail-timestamp">' + data.mails[key].date + '</div>' +
             '</div>';
@@ -44,8 +47,98 @@ $(document).ready(function() {
     setInterval(autoRefresh, PMD.autoRefreshInterval);
   }
 
+  /* *** Mail selection options. *** */
+
+  // Select all mail in the list.
+  $('#mail-options #select-all').click(function(event) {
+    $('#mails .mail .mail-from input[type="checkbox"]').prop('checked', true);
+
+    $(this).css('display', 'none').removeClass("visible");
+    $('#mail-options #deselect-all').css('display', 'inline-block').addClass('visible');
+    $('#mail-options #delete-selected').css('display', 'inline-block').addClass('visible');
+  });
+
+  // Deselect all mail in the list.
+  $('#mail-options #deselect-all').click(function(event) {
+    $('#mails .mail .mail-from input[type="checkbox"]').prop('checked', false);
+
+    $(this).css('display', 'none');
+    $('#mail-options #select-all').css('display', 'inline-block');
+    $('#mail-options #delete-selected').css('display', 'none');
+  });
+
+  // Confirmation message for deleting mails.
+  $('#mail-options #delete-selected').click(function(event) {
+    var confirmMessage = '<div id="delete-all-confirm">' +
+      'Are you sure you want to delete all selected messages?' +
+    '</div>';
+
+    $(confirmMessage).dialog({
+      resizable: false,
+      modal: true,
+      minHeight: 0,
+      closeOnEscape: false,
+      dialogClass: 'no-close',
+      title: 'Warning',
+      buttons: [
+        {
+          text: 'Yes',
+          'class': 'button-yes',
+          click: function() {
+            // Collect select mail ids.
+            var ids = Array();
+            $('#mails .mail .mail-from input[type="checkbox"]:checked').each(function() {
+              ids.push($(this).closest('.mail').attr('data-id'));
+              $(this).closest('.mail').remove();
+            });
+
+            $.ajax({
+              url: 'ajax.php',
+              type: 'POST',
+              dataType: 'json',
+              data: {
+                cmd: 'deleteAllSelectedMessage',
+                mailIds: ids
+              },
+            });
+
+            $( this ).dialog( "destroy" );
+          }
+        },
+        {
+          text: 'Cancel',
+          'class': 'button-cancel',
+          click: function() {
+            $( this ).dialog( "destroy" );
+          }
+        },
+      ]
+    });
+  });
+
+  $('#mails').on('click', '.mail input[type="checkbox"]', function(event) {
+    var selected = $('#mails .mail input[type="checkbox"]:checked').length;
+    var notSelected = $('#mails .mail input[type="checkbox"]:not(:checked)').length;
+
+    if (selected == 0) {
+      $('#mail-options #select-all').css('display', 'inline-block');
+      $('#mail-options #deselect-all').css('display', 'none');
+      $('#mail-options #delete-selected').css('display', 'none');
+    }
+    else if (selected > 0 && notSelected != 0) {
+      $('#mail-options #select-all').css('display', 'inline-block');
+      $('#mail-options #deselect-all').css('display', 'inline-block');
+      $('#mail-options #delete-selected').css('display', 'inline-block');
+    }
+    else if (notSelected == 0) {
+      $('#mail-options #select-all').css('display', 'none');
+      $('#mail-options #deselect-all').css('display', 'inline-block');
+      $('#mail-options #delete-selected').css('display', 'inline-block');
+    }
+  });
+
   // Load mail from database.
-  jQuery('#mails').on('click', '.mail', mailOnClickAction);
+  $('#mails').on('click', '.mail', mailOnClickAction);
 
   // Get mail's source.
   $('#read-mail #source').click(function() {
@@ -59,17 +152,34 @@ $(document).ready(function() {
           id: mailId
         },
         success: function(data) {
-          var win = window.open();
-          win.document.write(data);
+          $(data).dialog({
+            resizable: true,
+            modal: true,
+            maxHeight: 600,
+            minHeight: 0,
+            minWidth: 800,
+            title: 'Mail source',
+          });
         }
       });
     }
   });
 });
 
+/**
+ * On mouse click action to load mail from database through ajax.
+ *
+ * @param event
+ *   The jQuery's click event.
+ */
 function mailOnClickAction(event) {
+  if ($(event.target).is('input')) {
+    return;
+  }
+
   mailId = $(this).attr('data-id');
 
+  // Load mail with ID.
   $.ajax({
     url: 'ajax.php',
     type: 'POST',
@@ -79,12 +189,15 @@ function mailOnClickAction(event) {
       id: mailId
     },
     success: function(data) {
+      // Print values in the main content.
       $('#header-from span').html(data.header.from);
       $('#header-to span').html(data.header.to);
       $('#header-date span').html(data.datetime);
       $('#header-subject span').html(data.header.subject);
       $('#mail-body').html(data.message);
 
+      // If there is alternative content types, provide a dropdown list to be
+      // able to choose between them.
       if (data.content_type !== undefined) {
         if ($('#header-content-type select').length === 0) {
           var options = '';
@@ -98,6 +211,8 @@ function mailOnClickAction(event) {
 
           var ct_select = '<select>' + options + '</select>';
 
+          // Attach change action for selector, to load the mail with the
+          // selected type.
           $('#header-content-type').append(ct_select).change(function(event) {
             var type = $(this).find(':selected').val();
             $.ajax({
@@ -110,6 +225,7 @@ function mailOnClickAction(event) {
                 ctType: type
               },
               success: function(data) {
+                // Update mail body.
                 $('#mail-body').html(data.message);
               }
             });
@@ -123,7 +239,10 @@ function mailOnClickAction(event) {
   });
 }
 
+/**
+ * Determine and set the real height of the content list.
+ */
 function setContentListHeight() {
-  var headerHeight = $('#header').height() + 2 * $('#header').offset().top;
+  var headerHeight = $('#header').height() + 2 * $('#header').offset().top + $('#mail-options').height();
   $('#mails, #read-mail').height($(window).height() - headerHeight);
 }
