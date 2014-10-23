@@ -1,24 +1,90 @@
+/**
+ * Style for PMD.
+ *
+ * Used tools:
+ *  - http://css3generator.com/
+ *  - http://www.colorzilla.com/gradient-editor
+ */
+
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   font-size: 14px;
 }
 
+#header {
+  background: rgb(125,126,125);
+  background: -moz-linear-gradient(top,  rgba(125,126,125,1) 0%, rgba(14,14,14,1) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(125,126,125,1)), color-stop(100%,rgba(14,14,14,1)));
+  background: -webkit-linear-gradient(top,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
+  background: -o-linear-gradient(top,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
+  background: -ms-linear-gradient(top,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
+  background: linear-gradient(to bottom,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
+  border-top: 0;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 -10px 80px -10px #000000;
+  color: #fff;
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=0 );
+  margin: 0 auto;
+  padding: 10px;
+  width: 200px;
+  -webkit-border-radius: 0 0 10px 10px;
+  -webkit-box-shadow: 0 -10px 80px -10px #000000;
+}
+
+#header h1{
+  margin: 0;
+  font-weight: normal;
+  text-align: center;
+}
+
 /* --- Mail list options --- */
 #mail-options {
+  height: 30px;
+  margin-bottom: 5px;
   margin-left: 5px;
 }
 
-#mail-options > div {
-  display: inline-block;
+#content button {
+  border: none;
+  border-bottom: 3px solid;
+  border-radius: 3px;
+  bottom: 0;
+  color: #fff;
+  line-height: 20px;
+  outline: none;
+  padding: 3px 10px 0 10px;
+  vertical-align: top;
+  -webkit-border-radius: 3px;
 }
 
-#mail-options > div:hover {
-  color: #33aaff;
-  cursor: pointer;
+#content button:active {
+  margin-top: 2px;
+  border-bottom-width: 1px;
 }
 
-#mail-options > div:not(:first-child) {
+#mail-options button#select-all,
+#mail-options button#deselect-all{
+  background-color: #3498db;
+  border-bottom-color: #185d8b;
+}
+
+#mail-options > button#select-all:hover,
+#mail-options > button#deselect-all:hover {
+  background-color: #45a9ec;
+}
+
+#mail-options button#delete-selected {
+  background-color: #e24f3b;
+  border-bottom-color: #cd3122;
+}
+
+#mail-options button#delete-selected:hover {
+  background-color: #f35f4c;
+}
+
+#mail-options > button:not(:first-child) {
   display: none;
 }
 
@@ -31,8 +97,12 @@ body {
 }
 
 #mails .mail {
-  border-bottom: 1px solid #000;
+  border: 1px solid rgba(0,0,0,0);
+  border-left: 0;
+  border-radius: 0 10px 10px 0;
+  margin-bottom: 5px;
   padding: 5px;
+  -webkit-border-radius: 0 10px 10px 0;
 }
 
 #mails .mail > div {
@@ -46,8 +116,30 @@ body {
 }
 
 #mails .mail:hover {
-  background-color: #33aaff;
+  background: rgb(211,211,211);
+  background: -moz-linear-gradient(top,  rgba(211,211,211,1) 0%, rgba(249,249,249,1) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(211,211,211,1)), color-stop(100%,rgba(249,249,249,1)));
+  background: -webkit-linear-gradient(top,  rgba(211,211,211,1) 0%,rgba(249,249,249,1) 100%);
+  background: -o-linear-gradient(top,  rgba(211,211,211,1) 0%,rgba(249,249,249,1) 100%);
+  background: -ms-linear-gradient(top,  rgba(211,211,211,1) 0%,rgba(249,249,249,1) 100%);
+  background: linear-gradient(to bottom,  rgba(211,211,211,1) 0%,rgba(249,249,249,1) 100%);
+  border: 1px solid #bbb;
+  border-left: 0;
   cursor: pointer;
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d3d3d3', endColorstr='#f9f9f9',GradientType=0 );
+}
+
+#mails .mail.active {
+  background: rgb(222,239,255);
+  background: -moz-linear-gradient(top,  rgba(222,239,255,1) 0%, rgba(152,190,222,1) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(222,239,255,1)), color-stop(100%,rgba(152,190,222,1)));
+  background: -webkit-linear-gradient(top,  rgba(222,239,255,1) 0%,rgba(152,190,222,1) 100%);
+  background: -o-linear-gradient(top,  rgba(222,239,255,1) 0%,rgba(152,190,222,1) 100%);
+  background: -ms-linear-gradient(top,  rgba(222,239,255,1) 0%,rgba(152,190,222,1) 100%);
+  background: linear-gradient(to bottom,  rgba(222,239,255,1) 0%,rgba(152,190,222,1) 100%);
+  border: 1px solid #00546D;
+  border-left: 0;
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#deefff', endColorstr='#98bede',GradientType=0 );
 }
 
 #mails .mail .mail-from {
@@ -64,8 +156,30 @@ body {
 }
 
 #read-mail #mail-header {
-  margin-left: 260px;
   background-color: #ddd;
+  padding: 5px;
+  margin-left: 260px;
+}
+
+#read-mail #mail-header .label {
+  display: inline-block;
+  font-weight: bold;
+  text-align: right;
+  width: 55px;
+}
+
+#read-mail #mail-header #header-options {
+  margin-top: 5px;
+  margin-bottom: -2px;
+}
+
+#read-mail #mail-header #header-options button {
+  background-color: #3498db;
+  border-bottom-color: #185d8b;
+}
+
+#read-mail #mail-header #header-options #header-content-type {
+  display: inline-block;
 }
 
 #read-mail #mail-body {

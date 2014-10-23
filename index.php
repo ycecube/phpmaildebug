@@ -37,13 +37,13 @@ $date_max = query('SELECT MAX(timestamp) FROM mail')->fetch(PDO::FETCH_COLUMN);
   </head>
   <body>
     <div id="header">
-      <h1>PHPMailDebug</h1>
+      <h1 id="title">PHPMailDebug</h1>
     </div>
     <div id="content">
       <div id="mail-options">
-        <div id="select-all" class="visible">Select all</div>
-        <div id="deselect-all">Deselect all</div>
-        <div id="delete-selected">Delete selected</div>
+        <button id="select-all" class="visible">Select all</button>
+        <button id="deselect-all">Deselect all</button>
+        <button id="delete-selected">Delete selected</button>
       </div>
       <div id="mails">
       <?php foreach ($mails as $mail): ?>
@@ -60,12 +60,12 @@ $date_max = query('SELECT MAX(timestamp) FROM mail')->fetch(PDO::FETCH_COLUMN);
       </div><!-- /mails -->
       <div id="read-mail">
         <div id="mail-header">
-          <div id="header-from">From: <span></span></div>
-          <div id="header-to">To: <span></span></div>
-          <div id="header-date">Date: <span></span></div>
-          <div id="header-subject">Subject: <span></span></div>
+          <div id="header-from"><span class="label">From:</span> <span class="value"></span></div>
+          <div id="header-to"><span class="label">To:</span> <span class="value"></span></div>
+          <div id="header-date"><span class="label">Date:</span> <span class="value"></span></div>
+          <div id="header-subject"><span class="label">Subject:</span> <span class="value"></span></div>
           <div id="header-options">
-            <a href="#" id="source">Source</a>
+            <button id="source">Source</button>
             <div id="header-content-type"></div>
           </div>
         </div>

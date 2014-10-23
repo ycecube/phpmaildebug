@@ -179,6 +179,9 @@ function mailOnClickAction(event) {
 
   mailId = $(this).attr('data-id');
 
+  $('#mails .mail').removeClass('active');
+  $(this).addClass('active');
+
   // Load mail with ID.
   $.ajax({
     url: 'ajax.php',
@@ -190,10 +193,10 @@ function mailOnClickAction(event) {
     },
     success: function(data) {
       // Print values in the main content.
-      $('#header-from span').html(data.header.from);
-      $('#header-to span').html(data.header.to);
-      $('#header-date span').html(data.datetime);
-      $('#header-subject span').html(data.header.subject);
+      $('#header-from span.value').html(data.header.from);
+      $('#header-to span.value').html(data.header.to);
+      $('#header-date span.value').html(data.datetime);
+      $('#header-subject span.value').html(data.header.subject);
       $('#mail-body').html(data.message);
 
       // If there is alternative content types, provide a dropdown list to be
@@ -243,6 +246,6 @@ function mailOnClickAction(event) {
  * Determine and set the real height of the content list.
  */
 function setContentListHeight() {
-  var headerHeight = $('#header').height() + 2 * $('#header').offset().top + $('#mail-options').height();
+  var headerHeight = $('#header').height() + 2 * $('#header').offset().top + $('#mail-options').height() + 25;
   $('#mails, #read-mail').height($(window).height() - headerHeight);
 }
