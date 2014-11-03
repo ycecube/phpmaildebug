@@ -178,6 +178,10 @@ body {
   border-bottom-color: #185d8b;
 }
 
+#read-mail #mail-header #header-options button:hover {
+  background-color: #45a9ec;
+}
+
 #read-mail #mail-header #header-options #header-content-type {
   display: inline-block;
 }
