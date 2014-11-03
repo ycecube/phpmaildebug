@@ -13,6 +13,10 @@ if (!isset($auto_refresh)) {
   $auto_refresh = 0;
 }
 $date_max = query('SELECT MAX(timestamp) FROM mail')->fetch(PDO::FETCH_COLUMN);
+
+if (empty($date_max)) {
+  $date_max = 0;
+}
 ?>
 
 <!DOCTYPE html>

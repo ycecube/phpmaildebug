@@ -32,7 +32,12 @@ $(document).ready(function() {
             '</div>';
 
           // Append before the first mail in the list.
-          $('#mails .mail:first-child').before(mail);
+          if ($('#mails .mail').length > 0) {
+            $('#mails .mail:first-child').before(mail);
+          }
+          else {
+            $('#mails').html(mail);
+          }
         }
 
         // Update with the last timestamp.
@@ -89,7 +94,6 @@ $(document).ready(function() {
             var ids = Array();
             $('#mails .mail .mail-from input[type="checkbox"]:checked').each(function() {
               ids.push($(this).closest('.mail').attr('data-id'));
-              $(this).closest('.mail').remove();
             });
 
             $.ajax({
@@ -100,16 +104,35 @@ $(document).ready(function() {
                 cmd: 'deleteAllSelectedMessage',
                 mailIds: ids
               },
+              success: function(data) {
+                // Remove mails form the list.
+                $('#mails .mail .mail-from input[type="checkbox"]:checked').each(function() {
+                  $(this).closest('.mail').remove();
+                });
+
+                if ($('#mails .mail .mail-from input[type="checkbox"]:checked').length == 0) {
+                  PMD.timestampMax = 0;
+                }
+
+                // Remove values.
+                if ($.inArray(mailId, ids) > -1) {
+                  setValuesOnMainContent('','','','','');
+                  $('#header-content-type').html('');
+                }
+
+                // Trigger deselect all to reset the buttons.
+                $('#mail-options #deselect-all').click();
+              }
             });
 
-            $( this ).dialog( "destroy" );
+            $(this).dialog( "destroy" );
           }
         },
         {
           text: 'Cancel',
           'class': 'button-cancel',
           click: function() {
-            $( this ).dialog( "destroy" );
+            $(this).dialog( "destroy" );
           }
         },
       ]
@@ -192,12 +215,8 @@ function mailOnClickAction(event) {
       id: mailId
     },
     success: function(data) {
-      // Print values in the main content.
-      $('#header-from span.value').html(data.header.from);
-      $('#header-to span.value').html(data.header.to);
-      $('#header-date span.value').html(data.datetime);
-      $('#header-subject span.value').html(data.header.subject);
-      $('#mail-body').html(data.message);
+      // Set values in the main content.
+      setValuesOnMainContent(data.header.from, data.header.to, data.datetime, data.header.subject, data.message);
 
       // If there is alternative content types, provide a dropdown list to be
       // able to choose between them.
@@ -248,4 +267,12 @@ function mailOnClickAction(event) {
 function setContentListHeight() {
   var headerHeight = $('#header').height() + 2 * $('#header').offset().top + $('#mail-options').height() + 25;
   $('#mails, #read-mail').height($(window).height() - headerHeight);
+}
+
+function setValuesOnMainContent(from, to, date, subject, message) {
+  $('#header-from span.value').html(from);
+  $('#header-to span.value').html(to);
+  $('#header-date span.value').html(date);
+  $('#header-subject span.value').html(subject);
+  $('#mail-body').html(message);
 }

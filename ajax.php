@@ -134,6 +134,7 @@ switch ($post['cmd']) {
     foreach ($post['mailIds'] as $id) {
       query('DELETE FROM mail WHERE id = (:id)', array(':id' => $id));
     }
+    echo json_encode(true);
     break;
 
   default:
