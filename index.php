@@ -51,11 +51,12 @@ if (empty($date_max)) {
       </div>
       <div id="mails">
       <?php foreach ($mails as $mail): ?>
+        <?php $read = $mail['read'] == 0 ? 'unread' : 'read'; ?>
         <div class="mail" data-id="<?php echo $mail['id']; ?>">
           <?php $header = get_header_data($mail['header']); ?>
           <div class="mail-from">
             <input type="checkbox">
-            <span><?php echo $header['from']; ?></span>
+            <span class="<?php echo $read; ?>"><?php echo $header['from']; ?></span>
           </div>
           <div class="mail-subject"><?php echo $header['subject']; ?></div>
           <div class="mail-timestamp"><?php echo date('Y-m-d H:i:s', $mail['timestamp']); ?></div>

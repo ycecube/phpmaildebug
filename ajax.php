@@ -38,15 +38,19 @@ switch ($post['cmd']) {
     break;
 
   case 'getMailById':
-    $query = query('SELECT * FROM mail WHERE id = :id', array(':id' => $post['id']))->fetchObject();
+    $query = query('SELECT * FROM `mail` WHERE `id` = :id', array(':id' => $post['id']))->fetchObject();
+    // Mark mail read.
+    query('UPDATE mail SET `read` = :read WHERE `id` = :id', array(':read' => 1, ':id' => $post['id']));
 
     $data['header'] = get_header_data($query->header);
     $data['datetime'] = date('Y-m-d H:i:s', $query->timestamp);
 
-    $content_type = explode(';', $data['header']['content-type']);
-    if ($content_type[0] == 'multipart/mixed') {
-      preg_match('/"(.*)"/i', $content_type[1], $match);
-      $boundary = $match[1];
+    if (isset($data['header']['content-type'])) {
+      $content_type = explode(';', $data['header']['content-type']);
+      if ($content_type[0] == 'multipart/mixed') {
+        preg_match('/"(.*)"/i', $content_type[1], $match);
+        $boundary = $match[1];
+      }
     }
     $msg = $query->message;
 

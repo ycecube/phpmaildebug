@@ -142,7 +142,7 @@ body {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#deefff', endColorstr='#98bede',GradientType=0 );
 }
 
-#mails .mail .mail-from {
+#mails .mail .mail-from .unread {
   font-weight: bold;
 }
 

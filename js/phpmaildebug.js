@@ -3,8 +3,12 @@
  */
 
 var mailId = null;
+var unreadMails = 0;
 
 $(document).ready(function() {
+  // Count unread mails and update title.
+  updateTitle();
+
   // Set mail list height to the max of the window height.
   setContentListHeight();
   $(window).resize(setContentListHeight);
@@ -17,7 +21,7 @@ $(document).ready(function() {
       dataType: 'json',
       data: {
         cmd: 'getNewMails',
-        timestampMax: PMD.timestampMax,
+        timestampMax: PMD.timestampMax
       },
       success: function(data) {
         for (var key in data.mails) {
@@ -25,7 +29,7 @@ $(document).ready(function() {
           var mail = '<div class="mail" data-id="' + data.mails[key].id + '">' +
               '<div class="mail-from">' +
                 '<input type="checkbox">' +
-                '<span>' + data.mails[key].from + '</span>' +
+                '<span class="unread">' + data.mails[key].from + '</span>' +
               '</div>' +
               '<div class="mail-subject">' + data.mails[key].subject + '</div>' +
               '<div class="mail-timestamp">' + data.mails[key].date + '</div>' +
@@ -38,6 +42,10 @@ $(document).ready(function() {
           else {
             $('#mails').html(mail);
           }
+
+          updateTitle();
+
+          notify(data.mails[key].from, data.mails[key].subject);
         }
 
         // Update with the last timestamp.
@@ -139,6 +147,7 @@ $(document).ready(function() {
     });
   });
 
+  // Act on mail selection.
   $('#mails').on('click', '.mail input[type="checkbox"]', function(event) {
     var selected = $('#mails .mail input[type="checkbox"]:checked').length;
     var notSelected = $('#mails .mail input[type="checkbox"]:not(:checked)').length;
@@ -196,12 +205,15 @@ $(document).ready(function() {
  *   The jQuery's click event.
  */
 function mailOnClickAction(event) {
+  // Do nothing here, if we clicked on the input field.
   if ($(event.target).is('input')) {
     return;
   }
 
+  // Get mail ID.
   mailId = $(this).attr('data-id');
 
+  // Set currently clicked mail active.
   $('#mails .mail').removeClass('active');
   $(this).addClass('active');
 
@@ -217,6 +229,10 @@ function mailOnClickAction(event) {
     success: function(data) {
       // Set values in the main content.
       setValuesOnMainContent(data.header.from, data.header.to, data.datetime, data.header.subject, data.message);
+
+      // Mark mail read.
+      $('#mails .mail[data-id="' + mailId + '"] .mail-from span.unread').removeClass('unread').addClass('read');
+      updateTitle();
 
       // If there is alternative content types, provide a dropdown list to be
       // able to choose between them.
@@ -269,10 +285,86 @@ function setContentListHeight() {
   $('#mails, #read-mail').height($(window).height() - headerHeight);
 }
 
+/**
+ * Set mail values on the main content.
+ *
+ * @param from
+ *   Mail from.
+ * @param to
+ *   Mail sent to.
+ * @param date
+ *   The date when the mails sent.
+ * @param subject
+ *   Subject of the mail.
+ * @param message
+ *   The body of the mail.
+ */
 function setValuesOnMainContent(from, to, date, subject, message) {
   $('#header-from span.value').html(from);
   $('#header-to span.value').html(to);
   $('#header-date span.value').html(date);
   $('#header-subject span.value').html(subject);
   $('#mail-body').html(message);
+}
+
+/**
+ * Desktop notifications.
+ *
+ * Used source: http://stackoverflow.com/a/23974386
+ */
+function notify(from, subject) {
+  // Check if notification is available.
+  if (!("Notification" in window)) {
+    return false;
+  }
+
+  var notification = null;
+  var options = {
+    icon: 'images/mail.png',
+    body: 'From: ' + from + '\nSubject: ' + subject
+  };
+  var title = 'New message in PHPMailDebug';
+  if (Notification.permission === "granted") {
+    // If it's okay let's create a notification
+    notification = new Notification(title, options);
+  }
+  // Otherwise, we need to ask the user for permission
+  // Note, Chrome does not implement the permission static property
+  // So we have to check for NOT 'denied' instead of 'default'
+  else if (Notification.permission !== 'denied') {
+    Notification.requestPermission(function (permission) {
+
+      // Whatever the user answers, we make sure we store the information
+      if(!('permission' in Notification)) {
+        Notification.permission = permission;
+      }
+
+      // If the user is okay, let's create a notification
+      if (permission === "granted") {
+        notification = new Notification(title, options);
+      }
+    });
+  }
+
+  // Remove message after a while.
+  setTimeout(function() {
+    if (notification !== null) {
+      notification.close();
+    }
+  }, 4000);
+}
+
+/**
+ * Update title with the unread mail count.
+ */
+function updateTitle() {
+  var title = $('title').html().split(' ')[0];
+  var mailNum = $('#mails .mail .mail-from span.unread').length;
+
+  if (mailNum === 0) {
+    $('title').html(title);
+  }
+  else {
+    $('title').html(title + ' ' + '(' + mailNum + ')');
+  }
 }
