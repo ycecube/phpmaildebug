@@ -64,11 +64,13 @@ $(document).ready(function() {
 
   // Select all mail in the list.
   $('#mail-options #select-all').click(function(event) {
-    $('#mails .mail .mail-from input[type="checkbox"]').prop('checked', true);
+    if ($('#mails .mail').length > 0) {
+      $('#mails .mail .mail-from input[type="checkbox"]').prop('checked', true);
 
-    $(this).css('display', 'none').removeClass("visible");
-    $('#mail-options #deselect-all').css('display', 'inline-block').addClass('visible');
-    $('#mail-options #delete-selected').css('display', 'inline-block').addClass('visible');
+      $(this).css('display', 'none').removeClass("visible");
+      $('#mail-options #deselect-all').css('display', 'inline-block').addClass('visible');
+      $('#mail-options #delete-selected').css('display', 'inline-block').addClass('visible');
+    }
   });
 
   // Deselect all mail in the list.
