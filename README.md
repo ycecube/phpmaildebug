@@ -23,6 +23,7 @@ Installation
 4. Copy settings.php-example to settings.php
 5. In settings.php change variables to be able to connect to your database.
 6. In php.ini uncomment "sendmail_path" and set like this:
-   sendmail_path = "php -f /path/to/phpmaildebug/cli.php"
+   sendmail_path = "php /path/to/phpmaildebug/cli.php"
    In some cases you may need to set the full path to the php execution.
+   Do not add -f parameter for php as it could break some mail scripts.
 7. Done, by default you can access it like: http://localhost/phpmaildebug

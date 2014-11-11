@@ -67,9 +67,9 @@ $(document).ready(function() {
     if ($('#mails .mail').length > 0) {
       $('#mails .mail .mail-from input[type="checkbox"]').prop('checked', true);
 
-      $(this).css('display', 'none').removeClass("visible");
-      $('#mail-options #deselect-all').css('display', 'inline-block').addClass('visible');
-      $('#mail-options #delete-selected').css('display', 'inline-block').addClass('visible');
+      $(this).removeClass('active');
+      $('#mail-options #deselect-all').addClass('active');
+      $('#mail-options #delete-selected').addClass('active');
     }
   });
 
@@ -77,13 +77,18 @@ $(document).ready(function() {
   $('#mail-options #deselect-all').click(function(event) {
     $('#mails .mail .mail-from input[type="checkbox"]').prop('checked', false);
 
-    $(this).css('display', 'none');
-    $('#mail-options #select-all').css('display', 'inline-block');
-    $('#mail-options #delete-selected').css('display', 'none');
+    $(this).removeClass('active');
+    $('#mail-options #select-all').addClass('active');
+    $('#mail-options #delete-selected').removeClass('active');
   });
 
   // Confirmation message for deleting mails.
   $('#mail-options #delete-selected').click(function(event) {
+    // Do nothing if there are no mails selected.
+    if ($('#mails .mail .mail-from input:checked').length == 0) {
+      return false;
+    }
+
     var confirmMessage = '<div id="delete-all-confirm">' +
       'Are you sure you want to delete all selected messages?' +
     '</div>';
@@ -155,19 +160,19 @@ $(document).ready(function() {
     var notSelected = $('#mails .mail input[type="checkbox"]:not(:checked)').length;
 
     if (selected == 0) {
-      $('#mail-options #select-all').css('display', 'inline-block');
-      $('#mail-options #deselect-all').css('display', 'none');
-      $('#mail-options #delete-selected').css('display', 'none');
+      $('#mail-options #select-all').addClass('active');
+      $('#mail-options #deselect-all').removeClass('active');
+      $('#mail-options #delete-selected').removeClass('active');
     }
     else if (selected > 0 && notSelected != 0) {
-      $('#mail-options #select-all').css('display', 'inline-block');
-      $('#mail-options #deselect-all').css('display', 'inline-block');
-      $('#mail-options #delete-selected').css('display', 'inline-block');
+      $('#mail-options #select-all').addClass('active');
+      $('#mail-options #deselect-all').addClass('active');
+      $('#mail-options #delete-selected').addClass('active');
     }
     else if (notSelected == 0) {
-      $('#mail-options #select-all').css('display', 'none');
-      $('#mail-options #deselect-all').css('display', 'inline-block');
-      $('#mail-options #delete-selected').css('display', 'inline-block');
+      $('#mail-options #select-all').removeClass('active');
+      $('#mail-options #deselect-all').addClass('active');
+      $('#mail-options #delete-selected').addClass('active');
     }
   });
 
@@ -283,8 +288,9 @@ function mailOnClickAction(event) {
  * Determine and set the real height of the content list.
  */
 function setContentListHeight() {
-  var headerHeight = $('#header').height() + 2 * $('#header').offset().top + $('#mail-options').height() + 25;
-  $('#mails, #read-mail').height($(window).height() - headerHeight);
+  var headerHeight = $('#header').height() + 2 * $('#header').offset().top + $('#mail-options').height() + 20;
+  // Update mail list and body height.
+  $('#mails, #mail-body-wrapper').height($(window).height() - headerHeight);
 }
 
 /**

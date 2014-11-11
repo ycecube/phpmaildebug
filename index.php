@@ -40,29 +40,7 @@ if (empty($date_max)) {
     <script src="js/phpmaildebug.js" type="text/javascript"></script>
   </head>
   <body>
-    <div id="header">
-      <h1 id="title">PHPMailDebug</h1>
-    </div>
     <div id="content">
-      <div id="mail-options">
-        <button id="select-all" class="visible">Select all</button>
-        <button id="deselect-all">Deselect all</button>
-        <button id="delete-selected">Delete selected</button>
-      </div>
-      <div id="mails">
-      <?php foreach ($mails as $mail): ?>
-        <?php $read = $mail['read'] == 0 ? 'unread' : 'read'; ?>
-        <div class="mail" data-id="<?php echo $mail['id']; ?>">
-          <?php $header = get_header_data($mail['header']); ?>
-          <div class="mail-from">
-            <input type="checkbox">
-            <span class="<?php echo $read; ?>"><?php echo $header['from']; ?></span>
-          </div>
-          <div class="mail-subject"><?php echo $header['subject']; ?></div>
-          <div class="mail-timestamp"><?php echo date('Y-m-d H:i:s', $mail['timestamp']); ?></div>
-        </div>
-      <?php endforeach; ?>
-      </div><!-- /mails -->
       <div id="read-mail">
         <div id="mail-header">
           <div id="header-from"><span class="label">From:</span> <span class="value"></span></div>
@@ -74,8 +52,39 @@ if (empty($date_max)) {
             <div id="header-content-type"></div>
           </div>
         </div>
-        <div id="mail-body"></div>
-      </div><!-- /read-mail -->
-    </div><!-- /content -->
+        <div id="mail-body-wrapper">
+          <div id="mail-body"></div>
+        </div>
+      </div><!-- /#read-mail -->
+      <div id="header">
+        <div id="logo-title">
+          <div id="logo"></div>
+          <div id="title">
+            <h1>PHPMailDebug</h1>
+          </div>
+        </div>
+      </div><!-- /#header -->
+      <div id="sidebar">
+        <div id="mail-options">
+          <button id="select-all" title="Select all" class="active">☑</button>
+          <button id="deselect-all" title="Deselect all">☒</button>
+          <button id="delete-selected" title="Delete Selected">✗</button>
+        </div><!-- /#mail-options -->
+        <div id="mails">
+        <?php foreach ($mails as $mail): ?>
+          <?php $read = $mail['read'] == 0 ? 'unread' : 'read'; ?>
+          <div class="mail" data-id="<?php echo $mail['id']; ?>">
+            <?php $header = get_header_data($mail['header']); ?>
+            <div class="mail-from">
+              <input type="checkbox">
+              <span class="<?php echo $read; ?>"><?php echo $header['from']; ?></span>
+            </div>
+            <div class="mail-subject"><?php echo $header['subject']; ?></div>
+            <div class="mail-timestamp"><?php echo date('Y-m-d H:i:s', $mail['timestamp']); ?></div>
+          </div><!-- /.mail -->
+        <?php endforeach; ?>
+        </div><!-- /#mails -->
+      </div><!-- /#sidebar -->
+    </div><!-- /#content -->
   </body>
 </html>
