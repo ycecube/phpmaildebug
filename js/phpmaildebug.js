@@ -50,7 +50,7 @@ $(document).ready(function() {
 
         // Update with the last timestamp.
         if (data.length != []) {
-          PMD.timestampMax = data.timestampMax;
+          PMD.timestampMax = parseInt(data.timestampMax);
         }
       }
     });
@@ -125,10 +125,6 @@ $(document).ready(function() {
                   $(this).closest('.mail').remove();
                 });
 
-                if ($('#mails .mail .mail-from input[type="checkbox"]:checked').length == 0) {
-                  PMD.timestampMax = 0;
-                }
-
                 // Remove values.
                 if ($.inArray(mailId, ids) > -1) {
                   setValuesOnMainContent('','','','','');
@@ -197,7 +193,7 @@ $(document).ready(function() {
             maxHeight: 600,
             minHeight: 0,
             minWidth: 800,
-            title: 'Mail source',
+            title: 'Mail source'
           });
         }
       });
