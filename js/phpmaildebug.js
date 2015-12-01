@@ -286,7 +286,7 @@ function mailOnClickAction(event) {
 function setContentListHeight() {
   var headerHeight = $('#header').height() + 2 * $('#header').offset().top + $('#mail-options').height() + 20;
   // Update mail list and body height.
-  $('#mails, #mail-body-wrapper').height($(window).height() - headerHeight);
+  $('#mails, #mail-body-wrapper, #mail-content').height($(window).height() - headerHeight);
 }
 
 /**
@@ -308,7 +308,12 @@ function setValuesOnMainContent(from, to, date, subject, message) {
   $('#header-to span.value').html(to);
   $('#header-date span.value').html(date);
   $('#header-subject span.value').html(subject);
-  $('#mail-body').html(message);
+
+  var bodyContent = '<iframe id="mail-content" src="data:text/html,' + encodeURI(message) + '" sandbox></iframe>';
+  $('#mail-body').html(bodyContent);
+
+  // Set iframe's height too.
+  setContentListHeight();
 }
 
 /**

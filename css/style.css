@@ -6,7 +6,6 @@
  *  - http://www.colorzilla.com/gradient-editor
  */
 
-
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -177,4 +176,9 @@ body {
 
 #read-mail #mail-body-wrapper #mail-body {
   padding: 10px;
+}
+
+#read-mail #mail-body-wrapper #mail-body #mail-content {
+  border: none;
+  width: 100%;
 }
