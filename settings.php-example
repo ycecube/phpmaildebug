@@ -20,3 +20,6 @@ $auto_refresh = true;
 
 // Set the interval in miliseconds in which the new mails should be checked.
 $auto_refresh_interval = 2500;
+
+// Set default timezone.
+$default_timezone = 'Europe/Budapest';
